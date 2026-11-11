@@ -4,6 +4,8 @@ An IoT garden prototype that connects a soil reading to a measured watering deci
 
 The dashboard helps a user decide **when to water, how much to add next and when to stop**. Water is measured and applied by hand; the sensor supplies feedback after each portion.
 
+Read the [project report](docs/Soil_Moisture_Monitoring_Report.pdf) for the system design, calibration and training method, evaluation results and implementation experience.
+
 ![The assembled soil-moisture monitoring prototype](docs/images/prototype.jpg)
 
 ## What the system does
@@ -131,7 +133,7 @@ See [verification details](docs/TESTING.md) for the tested environment, coverage
 | `pi/backup.py` | Consistent database backup |
 | `tools/analyze.py` | Summary of exported experimental data |
 | `tests/` | Supplied software checks |
-| `docs/` | Hardware, operating and verification documentation |
+| `docs/` | Project report and hardware, operating and verification documentation |
 
 ## Project team
 
