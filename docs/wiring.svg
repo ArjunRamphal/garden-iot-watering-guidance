@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+<rect width="1200" height="650" fill="#f3f6f0"/>
+<g font-family="DejaVu Sans,Arial,sans-serif" fill="#15392c">
+<text x="50" y="58" font-size="28" font-weight="bold">Grove v1.4 + classic Uno + Raspberry Pi 5</text>
+<text x="50" y="92" font-size="17">Logical wiring - read board labels. All rewiring is done with power disconnected.</text>
+<rect x="50" y="145" width="270" height="310" rx="18" fill="white" stroke="#a7bba9" stroke-width="2"/>
+<text x="75" y="185" font-size="21" font-weight="bold">Grove moisture v1.4</text>
+<text x="75" y="215" font-size="16">Resistive analogue sensor</text>
+<text x="75" y="260" font-size="18">Red / VCC</text>
+<text x="75" y="310" font-size="18">Black / GND</text>
+<text x="75" y="360" font-size="18">Yellow / SIG</text>
+<text x="75" y="410" font-size="18">White / NC</text>
+<rect x="570" y="145" width="250" height="310" rx="18" fill="#e1eee4" stroke="#719a7b" stroke-width="2"/>
+<text x="600" y="185" font-size="23" font-weight="bold">Arduino Uno</text>
+<text x="600" y="215" font-size="16">Classic R3 / compatible</text>
+<text x="600" y="260" font-size="20">5V</text>
+<text x="600" y="310" font-size="20">GND</text>
+<text x="600" y="360" font-size="20">A0</text>
+<text x="600" y="412" font-size="18">USB-B socket</text>
+<path d="M320 254H570" stroke="#cb3b32" stroke-width="6" fill="none"/>
+<path d="M320 304H570" stroke="#272e2a" stroke-width="6" fill="none"/>
+<path d="M320 354H570" stroke="#d2a316" stroke-width="6" fill="none"/>
+<path d="M320 404H390" stroke="#a5b2a6" stroke-width="4" stroke-dasharray="8 6"/>
+<path d="M392 395l18 18m0-18l-18 18" stroke="#6a7c6c" stroke-width="3"/>
+<text x="350" y="240" font-size="14">Female cable end + male jumper</text>
+<text x="350" y="441" font-size="15">White stays disconnected</text>
+<rect x="925" y="145" width="225" height="310" rx="18" fill="white" stroke="#a7bba9" stroke-width="2"/>
+<text x="950" y="185" font-size="22" font-weight="bold">Raspberry Pi 5</text>
+<text x="950" y="220" font-size="16">Collector + SQLite</text>
+<text x="950" y="247" font-size="16">Local dashboard</text>
+<text x="950" y="324" font-size="16">GPIO: unused</text>
+<text x="950" y="406" font-size="16">USB-A host port</text>
+<path d="M820 410H925" stroke="#347494" stroke-width="8" fill="none"/>
+<text x="832" y="376" font-size="15">USB cable</text>
+<text x="832" y="444" font-size="13">Power + data</text>
+<text x="50" y="515" font-size="18" font-weight="bold">Three signal/power connections to the Uno. No sensor or Uno TX/RX wire to Pi GPIO.</text>
+<text x="50" y="550" font-size="17">Use the purchased Grove-to-female cable plus three male-to-male jumpers. Breadboard optional.</text>
+<text x="50" y="585" font-size="17">Pi uses its own suitable USB-C power supply. Keep electronics and connector above water/soil.</text>
+<text x="50" y="620" font-size="14">Pin mapping: Seeed Studio Grove - Moisture Sensor wiki. This is an authored logical diagram, not a physical assembly photograph.</text>
+</g></svg>
