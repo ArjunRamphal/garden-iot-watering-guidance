@@ -1,0 +1,30 @@
+# Deployment state and local configuration
+/pi/config.json
+/pi/data/
+/pi/backups/
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+access_token.txt
+.env
+.env.*
+!.env.example
+
+# Python and local development output
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*~
