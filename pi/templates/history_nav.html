@@ -1,0 +1,13 @@
+<nav class="garden-nav" aria-label="Dashboard pages">
+  <a href="/" {% if request.path == '/' %}aria-current="page"{% endif %}>Live dashboard</a>
+  <a href="/history" {% if request.path == '/history' %}aria-current="page"{% endif %}>History &amp; results</a>
+</nav>
+<section class="sound-toolbar" id="sound-panel" aria-labelledby="sound-title">
+  <div class="sound-copy"><h2 id="sound-title">Audible dry warning</h2>
+    <p id="sound-status" role="status" aria-live="polite">Sound off</p></div>
+  <div class="sound-actions">
+    <button type="button" id="sound-toggle" aria-pressed="false">Enable sound</button>
+    <button type="button" id="sound-test">Test sound</button>
+    <button type="button" id="sound-silence" hidden>Silence this warning</button>
+  </div>
+</section>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Garden moisture | COMP717A</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+  <script src="/static/dose_amount.js" defer></script>
+  <link rel="stylesheet" href="/static/analytics.css">
+  <script src="/static/dry_warning.js" defer></script>
+</head>
+<body data-csrf="{{ csrf }}">
+<header><div><p class="eyebrow">COMP717A</p><h1>Garden moisture</h1>
+<p>Measure the soil. Add a measured portion by hand. Recheck after soaking.</p></div>
+<span id="mode" class="tag">Connecting</span></header>
+<main>
+  {% include "history_nav.html" %}
+  <div id="simulation" class="notice warning" hidden>SIMULATED DATA - software practice only. This is not evidence from your sensor.</div>
+  <div id="message" class="notice" role="status" aria-live="polite" hidden></div>
+  <section id="decision" class="decision"><p class="eyebrow">CURRENT GUIDANCE</p>
+    <h2 id="state">Waiting for fresh readings</h2><p id="advice">Start the Arduino and leave this application running.</p>
+    <p id="quality"></p></section>
+  <div class="metrics">
+    <section class="card"><h3>Raw ADC</h3><p class="big" id="raw">--</p><p>0-1023 counts / median of 9</p></section>
+    <section class="card"><h3>Relative moisture index</h3><p class="big" id="index">--</p><p>0-100 relative scale</p></section>
+    <section class="card"><h3>Reading age</h3><p class="big" id="age">--</p><p id="connection">No serial connection yet</p></section>
+    <section class="card"><h3>Water reported</h3><p class="big" id="water-total">0 mL</p><p id="water-count">Measured and entered by the operator</p></section>
+  </div>
+  {% include "dose_amount.html" %}
+  <section class="card"><div class="section-title"><div><h2>Recent readings</h2><p>Up to 720 recent readings. Times shown in SAST.</p></div>
+    <button id="refresh" type="button">Refresh</button></div>
+    <div class="charts"><div><h3>Raw ADC counts</h3><canvas id="raw-chart" aria-label="Recent raw ADC values" role="img"></canvas></div>
+    <div><h3>Relative index (active profile only)</h3><canvas id="index-chart" aria-label="Recent relative moisture index" role="img"></canvas></div></div>
+    
+    <details><summary>Read the last 12 readings as a table</summary><div class="scroll"><table><thead><tr><th>Time (SAST)</th><th>ADC</th><th>Index</th><th>State</th></tr></thead><tbody id="reading-rows"></tbody></table></div></details>
+  </section>
+  <div class="two-columns">
+  <section class="card"><h2>Record water added</h2>
+    <p>Enter the measured amount after adding it.</p>
+    <form id="water-form">
+      <label>Measured volume (mL)<input name="volume_ml" type="number" min="0.1" max="10000" step="0.1" required></label>
+      <label>Your name / initials<input name="operator" maxlength="80" required></label>
+      <label>Notes<textarea name="note" maxlength="500" placeholder="Where poured, drainage, reason for watering..."></textarea></label>
+      <label class="check"><input name="already_applied" type="checkbox" required>I have already measured and added this water by hand.</label>
+      <button type="submit" class="primary">Save watering record</button>
+    </form>
+    <div id="watering-list" class="log"></div>
+  </section>
+  <section class="card"><h2>Garden / plant observations</h2><p id="crop-description"></p>
+    
+    <form id="observation-form">
+      <label>Your name / initials<input name="operator" maxlength="80" required></label>
+      <label>Observation<textarea name="note" maxlength="1000" required></textarea></label>
+      <button type="submit">Save observation</button>
+    </form><div id="observations-list" class="log"></div>
+  </section>
+  </div>
+  <section class="card"><h2>1. Calibrate in your own soil</h2>
+    <p>Keep the probe fixed and capture settled readings.</p>
+    <p id="capture-progress" class="tag"></p>
+    <div class="two-columns">
+      <form id="dry-form"><h3>Dry reference</h3><p>Use representative dry soil.</p>
+        <label>Describe this reference<textarea name="note" maxlength="500" required placeholder="Soil, depth, condition, container..."></textarea></label>
+        <button type="submit">Capture last 12 samples as dry</button><p id="dry-result"></p></form>
+      <form id="wet-form"><h3>Drained wet reference</h3><p>Use wetted soil after drainage and settling.</p>
+        <label>Describe this reference<textarea name="note" maxlength="500" required placeholder="Soil, drainage period, depth..."></textarea></label>
+        <button type="submit">Capture last 12 samples as wet</button><p id="wet-result"></p></form>
+    </div>
+    <form id="calibration-form"><label>Calibration description<input name="note" maxlength="500" required placeholder="Soil and fixed probe position used for this profile"></label>
+      <button type="submit" class="primary">Activate these dry and wet references</button></form>
+    <p id="active-calibration"></p><p class="small">Minimum dry-wet reference gap: 50 ADC.</p>
+  </section>
+  <section class="card"><h2>2. Set and validate the decision thresholds</h2>
+    
+    <form id="settings-form">
+      <div class="two-columns"><label>Plant / container<input name="crop" maxlength="120" required></label>
+      <label>Soil and setup details<textarea name="soil_notes" maxlength="500"></textarea></label></div>
+      <div class="three-columns"><label>Dry trigger (index)<input name="low_index" type="number" min="0" max="99" step="0.1" required></label>
+      <label>Clear warning at (index)<input name="clear_index" type="number" min="1" max="100" step="0.1" required></label>
+      </div>
+      <label class="check"><input name="thresholds_confirmed" type="checkbox">I have checked these thresholds against this soil and test setup.</label>
+      <button type="submit">Save settings</button>
+    </form>
+  </section>
+  <section class="card"><h2>Exports</h2><p>Export timestamps use UTC.</p>
+    <nav class="exports" aria-label="Data downloads">
+      <a href="/api/export/readings.csv">Readings CSV</a><a href="/api/export/watering.csv">Watering CSV</a>
+      <a href="/api/export/events.csv">Events CSV</a><a href="/api/export/observations.csv">Observations CSV</a>
+      <a href="/api/export/calibrations.csv">Calibration profiles CSV</a><a href="/api/export/captures.csv">Reference samples CSV</a>
+      <a href="/api/export/configuration.json">Current configuration JSON</a>
+    </nav><p id="record-count"></p>
+    <h3>Recent system events</h3><div id="events-list" class="log"></div>
+  </section>
+</main><footer>COMP717A</footer>
+</body></html>

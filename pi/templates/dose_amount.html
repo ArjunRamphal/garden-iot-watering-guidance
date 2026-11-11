@@ -1,0 +1,80 @@
+<section class="card" id="water-amount-panel" aria-labelledby="water-amount-title">
+  <p class="eyebrow">MANUAL WATERING</p>
+  <h2 id="water-amount-title">How much water should I add?</h2>
+  <p id="dose-message" role="status" aria-live="polite">Loading...</p>
+  <div class="three-columns">
+    <div><h3>Estimated remaining water</h3><p class="big" id="dose-total">--</p></div>
+    <div><h3>Add this portion next</h3><p class="big" id="dose-next">--</p></div>
+    <div><h3>Target moisture index</h3><p class="big" id="dose-target">--</p></div>
+  </div>
+  <p id="dose-range" class="small"></p>
+  <p id="dose-current-water" class="small"></p>
+  <p id="dose-profile-description" class="small"></p>
+  <p id="dose-calibration-state" class="small"></p>
+  <div id="dose-alert" class="notice" role="status" hidden></div>
+  <form id="dose-confirm-form">
+    <label class="check"><input type="checkbox" name="same_setup" required>The soil, container and probe placement match the selected profile.</label>
+    <button type="submit">Confirm setup</button>
+  </form>
+  <form id="dose-new-sample-form"><button type="submit">New soil sample</button></form>
+  <details id="dose-calibration-details">
+    <summary>Water calibration</summary>
+    <form id="dose-select-form">
+      <label>Profile<select name="profile_id" id="dose-profile-select" required></select></label>
+      <button type="submit">Use profile</button>
+    </form>
+    <details>
+      <summary>Create a profile</summary>
+      <form id="dose-profile-form">
+        <div class="two-columns">
+          <label>Profile name<input name="name" maxlength="120" required></label>
+          <label>Soil amount<input name="soil_quantity" maxlength="160" required></label>
+          <label>Container and drainage<input name="container" maxlength="160" required></label>
+          <label>Probe depth (cm)<input name="depth_cm" type="number" min="0.1" max="20" step="0.01" required></label>
+          <label>Measuring tool<input name="measuring_tool" maxlength="160" required></label>
+          <label>Measuring graduation (mL)<input name="resolution_ml" type="number" min="0.1" max="1000" step="0.1" required></label>
+          <label>Maximum portion (mL)<input name="max_portion_ml" type="number" min="0.1" max="10000" step="0.1" required></label>
+          <label>Check error limit (mL)<input name="allowed_error_ml" type="number" min="0.1" max="10000" step="0.1" required></label>
+        </div>
+        <button type="submit">Create profile</button>
+      </form>
+    </details>
+    <h3>Training predictions</h3>
+    <p id="dose-check-preview" class="small"></p>
+    <div class="scroll"><table><thead><tr><th>Trial</th><th>Predicted water (mL)</th></tr></thead><tbody id="dose-training-rows"></tbody></table></div>
+    <h3>Start a calibration run</h3>
+    <form id="dose-begin-form">
+      <label>Initials<input name="operator" maxlength="80" required></label>
+      <label>Run type<select name="kind"><option value="training">Training run</option><option value="validation">Separate check run</option></select></label>
+      <label class="check"><input name="same_setup" type="checkbox" required>This fresh soil sample matches the profile.</label>
+      <button type="submit">Capture baseline and start run</button>
+    </form>
+    <p id="dose-run-status"></p>
+    <p id="dose-stable-status" class="small"></p>
+    <div id="dose-run-controls" hidden>
+      <form id="dose-add-form">
+        <h3>Record an addition</h3>
+        <label>Water added this step (mL)<input name="volume_ml" type="number" min="0.1" max="10000" step="0.1" required></label>
+        <label>Note<input name="note" maxlength="300"></label>
+        <label class="check"><input name="already_applied" type="checkbox" required>I measured and added this water.</label>
+        <button type="submit">Save addition</button>
+      </form>
+      <form id="dose-capture-form">
+        <label class="check"><input name="setup_unchanged" type="checkbox" required>The setup is unchanged, with no unrecorded water, standing water or drainage.</label>
+        <button type="submit">Capture settled reading</button>
+      </form>
+      <form id="dose-finish-form"><button type="submit">Finish run</button></form>
+      <form id="dose-end-form">
+        <label>Reason for ending early<input name="reason" maxlength="500" required></label>
+        <button type="submit">End run</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>Total water (mL)</th><th>ADC</th><th>Index</th></tr></thead><tbody id="dose-point-rows"></tbody></table></div>
+    </div>
+    <nav class="exports" aria-label="Calibration downloads">
+      <a href="/api/dose/export/all.json">All water-calibration evidence</a>
+      <a href="/api/dose/export/profiles.csv">Profiles CSV</a>
+      <a href="/api/dose/export/runs.csv">Runs CSV</a>
+      <a href="/api/dose/export/points.csv">Points CSV</a>
+    </nav>
+  </details>
+</section>

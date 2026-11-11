@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>History &amp; results | Garden moisture</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/analytics.css">
+  <script src="/static/dry_warning.js" defer></script>
+  <script src="/static/analytics.js" defer></script>
+</head>
+<body data-csrf="{{ csrf }}">
+<header><div><p class="eyebrow">COMP717A · GARDEN MOISTURE</p>
+  <h1>History &amp; results</h1>
+  <p>Water applied, soil response and prediction results.</p></div>
+  <span class="history-tag" id="history-source">Loading records</span>
+</header>
+<main>
+  {% include "history_nav.html" %}
+  <div id="analytics-message" class="notice error" role="status" hidden></div>
+  <section class="card analytics-card" id="summary-panel" aria-labelledby="summary-title">
+    <div class="section-title panel-heading">
+      <div><p class="eyebrow">INPUT USE &amp; MONITORING</p><h2 id="summary-title">Daily &amp; weekly summaries</h2></div>
+      <form id="summary-form" class="inline-controls">
+        <label for="summary-date">Summary date <span class="muted">(SAST)</span><input id="summary-date" type="date" required></label>
+        <button type="submit">Show</button><button id="latest-date" type="button">Latest records</button>
+      </form>
+    </div>
+    <div class="period-grid">
+      <article class="period-box"><h3>Selected day <span id="day-label"></span></h3>
+        <div class="summary-metrics">
+          <div><p>Water recorded</p><strong id="day-volume">—</strong></div>
+          <div><p>Watering entries</p><strong id="day-entries">—</strong></div>
+          <div><p>Recorded coverage</p><strong id="day-coverage">—</strong></div>
+          <div><p>Dry-warning time</p><strong id="day-dry">—</strong></div>
+        </div>
+      </article>
+      <article class="period-box"><h3>Calendar week <span id="week-label"></span></h3>
+        <div class="summary-metrics">
+          <div><p>Water recorded</p><strong id="week-volume">—</strong></div>
+          <div><p>Watering entries</p><strong id="week-entries">—</strong></div>
+          <div><p>Recorded coverage</p><strong id="week-coverage">—</strong></div>
+          <div><p>Dry-warning time</p><strong id="week-dry">—</strong></div>
+        </div>
+      </article>
+    </div>
+    <div class="chart-heading"><h3>Recorded water by day</h3><div class="chart-legend">
+      <span class="legend-training">Training</span><span class="legend-checks">Checks</span>
+      <span class="legend-references">Reference calibration</span><span class="legend-other">Other records</span>
+    </div></div>
+    <div class="analytics-plot-scroll"><svg id="weekly-chart" class="analytics-chart weekly-chart" viewBox="0 0 1000 230" role="img" aria-label="Recorded water volumes for the selected SAST calendar week"></svg></div>
+    <p class="mobile-chart-hint">Swipe to see the full graph.</p>
+    <p class="chart-note">Coverage and dry-warning time count consecutive recorded readings. Gaps are excluded.</p>
+    <details class="analytics-details"><summary>Daily totals and record categories</summary>
+      <p class="small">Training and check entries use their saved run labels. Reference calibration uses entries labelled “calibration”. Other records retain their original unclassified entries.</p>
+      <div class="scroll"><table><thead><tr><th>Day (SAST)</th><th>Water (mL)</th><th>Entries</th><th>Readings</th><th>Coverage</th><th>Dry warning</th></tr></thead><tbody id="daily-rows"></tbody></table></div>
+    </details>
+  </section>
+  <section class="card analytics-card" id="watering-panel" aria-labelledby="watering-title">
+    <div class="section-title panel-heading">
+      <div><p class="eyebrow">MEASURE · ADD · OBSERVE</p><h2 id="watering-title">Watering response</h2></div>
+      <label class="compact-label" for="watering-run">View<select id="watering-run"><option value="day">Selected day · all watering</option></select></label>
+    </div>
+    <div class="plot-meta"><span id="watering-window"></span><span id="watering-count"></span></div>
+    <div class="chart-legend response-legend"><span class="legend-response">Moisture index</span><span class="legend-water">Water recorded</span><span class="legend-capture">Settled capture</span><span class="legend-target">Run target</span></div>
+    <div class="analytics-plot-scroll"><svg id="watering-chart" class="analytics-chart watering-chart" viewBox="0 0 1000 320" role="img" aria-label="Recorded moisture readings with water-addition markers and settled captures"></svg></div>
+    <p class="mobile-chart-hint">Swipe to see the full graph.</p>
+    <div class="response-metrics">
+      <div><span>Water recorded in this view</span><strong id="response-volume">—</strong></div>
+      <div><span>First settled index</span><strong id="response-start">—</strong></div>
+      <div><span>Last settled index</span><strong id="response-end">—</strong></div>
+      <div><span>Recorded readings</span><strong id="response-readings">—</strong></div>
+    </div>
+    <p class="chart-note">Water markers show when additions were recorded. Lines stop at gaps or changes of stream or calibration.</p>
+    <details class="analytics-details"><summary>Water additions and settled readings</summary>
+      <div class="two-columns"><div class="scroll"><table><thead><tr><th>Recorded (SAST)</th><th>Added (mL)</th><th>Index at entry</th></tr></thead><tbody id="water-addition-rows"></tbody></table></div>
+      <div class="scroll"><table><thead><tr><th>Capture (SAST)</th><th>Total (mL)</th><th>Settled index</th></tr></thead><tbody id="settled-rows"></tbody></table></div></div>
+    </details>
+  </section>
+  <section class="card analytics-card" id="prediction-panel" aria-labelledby="prediction-title">
+    <div class="section-title panel-heading">
+      <div><p class="eyebrow">ESTIMATE &amp; MEASURED RESULT</p><h2 id="prediction-title">Prediction results</h2></div>
+      <label class="compact-label" for="prediction-scope">Results<select id="prediction-scope"><option value="recorded">Recorded checks</option><option value="recalculated">Saved recalculations</option></select></label>
+    </div>
+    <p id="prediction-description" class="plot-meta"></p>
+    <div class="prediction-metrics">
+      <div><span id="prediction-count-label">Results shown</span><strong id="prediction-count">—</strong></div>
+      <div><span>Mean absolute difference</span><strong id="prediction-mean">—</strong></div>
+      <div><span>Largest absolute difference</span><strong id="prediction-maximum">—</strong></div>
+    </div>
+    <div class="chart-legend prediction-legend"><span class="legend-prediction">Predicted amount</span><span class="legend-measured">Measured water total</span></div>
+    <div class="analytics-plot-scroll"><svg id="prediction-chart" class="analytics-chart prediction-chart" viewBox="0 0 1000 260" role="img" aria-label="Predicted water amounts compared with physically recorded water totals"></svg></div>
+    <p class="mobile-chart-hint">Swipe to see the full graph.</p>
+    <div class="scroll"><table class="prediction-table"><thead><tr><th>Check run</th><th>Starting index</th><th>Final index / target</th><th>Predicted (mL)</th><th>Measured total (mL)</th><th>Difference (mL)</th></tr></thead><tbody id="prediction-rows"></tbody></table></div>
+    <details class="analytics-details"><summary>How these comparisons are calculated</summary>
+      <p class="small">Difference is the absolute difference between the prediction and the water total physically recorded. Saved check-error values can instead use the interpolated amount at the exact target. Recalculations reuse existing measurements; they are shown separately from predictions saved when a check began.</p>
+      <div class="scroll"><table><thead><tr><th>Check</th><th>Amount at target (mL)</th><th>Saved target error (mL)</th><th>Original check outcome</th></tr></thead><tbody id="target-error-rows"></tbody></table></div>
+    </details>
+  </section>
+  <p class="history-footnote" id="history-footnote"></p>
+</main>
+<footer>COMP717A · Garden moisture</footer>
+</body></html>
